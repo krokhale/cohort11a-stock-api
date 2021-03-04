@@ -1,11 +1,29 @@
 var express = require('express');
 var router = express.Router();
 const {Stock} = require('../lib/models');
-
+const yahooStockPrices = require('yahoo-stock-prices')
 
 // DELETE - perform DELETE request on http://localhost:3000/api/v1/stocks/:id - STEP 1 Done | STEP 2 - Perform Actual Queries
 // UPDATE - perform PUT request on http://localhost:3000/api/v1/stocks/:id - STEP 1 Done | STEP 2 - Perform Actual Queries
 // CREATE - - perform POST request on http://localhost:3000/api/v1/stocks - STEP 1 Done | STEP 2 - Perform Actual Queries
+
+// NON-REST - CUSTOM
+// GET /api/v1/stocks/search?symbol=AAPL
+// GET /api/v1/stocks/search/AAPL
+// GET /api/v1/stocks/search/MSFT
+// POST /api/v1/stocks/search req.body
+
+router.get('/search/:symbol', async function(req, res, next) {
+    console.log(req.query)
+    console.log(req.params)
+    try {
+        const data = await yahooStockPrices.getCurrentData(req.params.symbol);
+        res.json({success: true, data: data});
+    } catch(err){
+        res.json({success: false, data: {}});
+    }
+
+})
 
 // CREATE
 router.post('/', async function(req, res, next) {
