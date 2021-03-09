@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {Stock} = require('../lib/models');
+const {Portfolio} = require('../lib/models');
 const yahooStockPrices = require('yahoo-stock-prices')
 
 // DELETE - perform DELETE request on http://localhost:3000/api/v1/stocks/:id - STEP 1 Done | STEP 2 - Perform Actual Queries
@@ -28,7 +28,7 @@ router.get('/search/:symbol', async function(req, res, next) {
 // CREATE
 router.post('/', async function(req, res, next) {
     console.log(req.body)
-    let stock = await Stock.create(req.body);
+    let stock = await Portfolio.create(req.body);
     // Stock.create(req.body)
     //     .then((stock) => {
     //         res.json({success: true});
@@ -43,7 +43,7 @@ router.put('/:id', async function(req, res, next) {
     console.log(req.params)
     // let stock = await Stock.update()
     // let stock = Stock.update(req.body, {where: req.params.id})
-    let stock = await Stock.update(req.body, {
+    let stock = await Portfolio.update(req.body, {
         where: {id: req.params.id}
     });
     res.json(stock);
@@ -52,14 +52,20 @@ router.put('/:id', async function(req, res, next) {
 // DELETE
 router.delete('/:id', async function(req, res, next) {
     // console.log(req.params)
-    let dog = await Stock.destroy({where: {id: req.params.id}});
+    let dog = await Portfolio.destroy({where: {id: req.params.id}});
     res.json(dog);
 });
 
 
 /* GET users listing. */
-// router.get('/', function(req, res, next) {
-//     res.send('respond with a stock');
-// });
+router.get('/', async function(req, res, next) {
+
+    console.log('I WAS HERE *********')
+
+    let items = await Portfolio.findAll({})
+
+    console.log(items);
+    res.json(items);
+});
 
 module.exports = router;

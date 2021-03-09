@@ -10,8 +10,11 @@ const {Wallet} = require('../lib/models');
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-    res.send('respond with a stock');
+router.get('/', async function(req, res, next) {
+
+    let currentWallet = await Wallet.findOne({})
+    console.log(currentWallet);
+    res.json(currentWallet);
 });
 
 module.exports = router;
